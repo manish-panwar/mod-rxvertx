@@ -109,6 +109,13 @@ public class RxHttpClient {
     };
     
     HttpClientRequest req=core.request(method,uri,rh);
+      // if connection negotion fails - exception handler on http-client. SSL Exception aren't caught on httpRequest, but on httpClient.
+      this.core.exceptionHandler(new Handler<Throwable>() {
+        @Override
+        public void handle(Throwable event) {
+          rh.fail(event);
+        }
+      });
       // if req fails, notify observers
       req.exceptionHandler(new Handler<Throwable>() {
           @Override
